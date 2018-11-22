@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no">
+	<title>draw</title>
+	<style type="text/css">
+	body{margin:0;}
+	</style>
+</head>
+<body>
+	<script type="text/javascript">
+	// create canvas
+	var canvas = document.createElement('canvas');
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
+	canvas.style.display = 'block';
+	document.body.appendChild(canvas);
+	var context = canvas.getContext('2d');
+
+	// style
+	context.lineWidth = 3;
+	context.lineCap = 'round';
+	context.lineJoin = 'round';
+	context.strokeStyle = '#0af'
+
+	// event
+	var isMouseDown = false;
+	canvas.addEventListener('mousedown', down);
+	canvas.addEventListener('touchstart', down);
+	canvas.addEventListener('mousemove',draw);
+	canvas.addEventListener('touchmove', draw);
+	canvas.addEventListener('mouseup', up);
+	canvas.addEventListener('touchend', up);
+	function down(e){
+		isMouseDown = true;
+		e = e.targetTouches? e.targetTouches[0]:e;
+		context.moveTo(e.clientX, e.clientY);
+	}
+	function draw(e){
+		e.preventDefault();
+		if (!isMouseDown) {return};
+		e = e.targetTouches? e.targetTouches[0]:e;
+		context.lineTo(e.clientX, e.clientY);
+		context.stroke();
+	};
+	function up(){
+		isMouseDown = false;
+	}
+	</script>
+</body>
+</html>
