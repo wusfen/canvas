@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no">
+	<title></title>
+</head>
+
+<body>
+
+	<input id="input" style="position:absolute; z-index:99" type="file" accept="image/*" >
+
+
+	<script type="text/javascript">
+	// create canvas
+	var canvas = document.createElement('canvas');
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
+	canvas.style.display = 'block';
+	canvas.style.position = 'absolute';
+	canvas.style.top = 0;
+	canvas.style.left = 0;
+	document.body.appendChild(canvas);
+	var context = canvas.getContext('2d');
+	window.onresize = function() {
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+	};
+
+	// select file
+	var input = document.getElementById('input');
+	input.onchange = function(){
+		var file = this.files[0];
+		var fileReader = new FileReader();
+		fileReader.onload = function(e){
+			var src = this.result;
+			var img = new Image;
+			img.src = src;
+			img.onload = function () {
+				context.drawImage(this, 0, 0)
+			}
+		}
+		fileReader.readAsDataURL(file);
+	}
+
+	</script>
+</body>
+
+</html>

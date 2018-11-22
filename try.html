@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no">
+	<title>canvas</title>
+</head>
+<body>
+
+<script type="text/javascript">
+// create canvas
+var canvas = document.createElement('canvas');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+canvas.style.display = 'block';
+canvas.style.position = 'absolute';
+canvas.style.top = 0;
+canvas.style.left = 0;
+document.body.appendChild(canvas);
+var context = canvas.getContext('2d');
+window.onresize = function(){
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
+};
+
+var load = function(src, cb){
+	var img = new Image;
+	img.onload = function(){
+		load.img = this;
+		cb&&cb.apply(this);
+	}
+	img.src = src;
+};
+
+load('mn.jpg', function(){
+	run();
+});
+
+
+window.requestAnimationFrame = window.requestAnimationFrame
+	|| window.webkitRequestAnimationFrame
+	|| window.mozRequestAnimationFrame
+	|| window.msRequestAnimationFrame
+	|| window.oRequestAnimationFrame
+	|| function(cb){setTimeout(cb, 1000/60)};
+function run(){
+	onframe();
+	// setTimeout(run, 1000/60);
+	requestAnimationFrame(run);
+	FPS();
+}
+
+function FPS () {
+	FPS.f++;
+	var now = new Date().getTime();
+	if(now-FPS.time>1000){
+		FPS.fps = FPS.f;
+		FPS.f = 0;
+		FPS.time = now;
+		// document.title = FPS.fps;
+		// console.log(FPS.fps);
+	}
+		context.fillText(FPS.fps, 10, 20);
+}
+FPS.fps = 0;
+FPS.f = 0;
+FPS.time = new Date().getTime();
+
+
+var x=0, y=0;
+var xx=true, yy=true;
+var speed = 1;
+function onframe(){
+	context.clearRect(0,0,canvas.width,canvas.height);
+	if (x>canvas.width-load.img.width) {xx=false}
+	if (y>canvas.height-load.img.height) {yy=false}
+	if (x<0) {xx=true}
+	if (y<0) {yy=true}
+	if (xx) {x+=speed}else{x-=speed};
+	if (yy) {y+=speed}else{y-=speed};
+	context.drawImage(load.img, x, y);
+}
+</script>
+
+</body>
+</html>
